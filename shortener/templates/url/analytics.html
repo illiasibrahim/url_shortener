@@ -1,0 +1,157 @@
+<!-- shortener/templates/shortener/analytics.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Analytics</title>
+    <style>
+        /* Basic reset and styling */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top menu bar styling */
+        .top-menu {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        .top-menu .home-link {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1em;
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            border-radius: 3px;
+        }
+
+        .top-menu .home-link:hover {
+            background-color: #45a049;
+        }
+
+        .top-menu .title {
+            margin: 0 auto;
+            font-size: 1.5em;
+        }
+
+        .top-menu a.logout {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1em;
+            padding: 5px 10px;
+            background-color: #e63946;
+            border-radius: 3px;
+        }
+
+        .top-menu a.logout:hover {
+            background-color: #d62828;
+        }
+
+        /* Centered container */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            padding: 20px;
+            flex-direction: column;
+        }
+
+        .analytics-box {
+            width: 100%;
+            max-width: 600px;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: left;
+        }
+
+        .analytics-box h2 {
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .analytics-info {
+            margin-bottom: 15px;
+        }
+
+        .analytics-info label {
+            font-weight: bold;
+        }
+
+        .analytics-info span {
+            display: block;
+            margin-top: 5px;
+        }
+
+        .analytics-info .highlight {
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top menu bar -->
+    <div class="top-menu">
+        <a href="{% url 'home' %}" class="home-link">Home</a>
+        <h1 class="title">URL Analytics</h1>
+        <a href="{% url 'account_logout' %}" class="logout">Logout</a>
+    </div>
+
+    <!-- Centered analytics container -->
+    <div class="container">
+        <div class="analytics-box">
+            <h2>Analytics for URL: {{ url.shortened_path }}</h2>
+
+            <div class="analytics-info">
+                <label>Total Hits:</label>
+                <span class="highlight">{{ url.access_count }}</span>
+            </div>
+
+            <div class="analytics-info">
+                <label>Successful Hits:</label>
+                <span class="highlight">{{ url.success_count }}</span>
+            </div>
+
+            <div class="analytics-info">
+                <label>Unique Visitors:</label>
+                <span class="highlight">{{ url.unique_visitors }}</span>
+            </div>
+
+            <div class="analytics-info">
+                <label>Most Users From:</label>
+                <span class="highlight">
+                    {% if most_common_location %}
+                        {{ most_common_location.city }}, {{ most_common_location.region }}, {{ most_common_location.country }}
+                    {% else %}
+                        No data available
+                    {% endif %}
+                </span>
+            </div>
+
+            <div class="analytics-info">
+                <label>Top Locations:</label>
+                <ul>
+                    {% for location in top_locations %}
+                        <li>{{ location.city }}, {{ location.region }}, {{ location.country }} - {{ location.count }} hits</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
